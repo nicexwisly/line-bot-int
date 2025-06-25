@@ -39,7 +39,7 @@
   <div class="form-container">
     <h3 class="mb-4 text-center">ฟอร์มสั่งซื้อสินค้า</h3>
     
-    <form id="orderForm" action="/submit" method="POST">
+    <form id="orderForm">
       <div class="mb-3">
         <label for="department" class="form-label">เลือกแผนก</label>
         <select class="form-select" id="department" name="department" required>
@@ -72,12 +72,19 @@
 
   <script>
     function confirmOrder() {
+      const form = document.getElementById("orderForm");
+      const department = document.getElementById("department").value;
       const customer = document.getElementById("customer").value;
       const item = document.getElementById("item").value;
       const detail = document.getElementById("detail").value;
 
+      if (!department || !customer || !item || !detail) {
+        Swal.fire('กรุณากรอกข้อมูลให้ครบถ้วน', '', 'warning');
+        return;
+      }
+
       Swal.fire({
-        icon: 'warning',
+        icon: 'question',
         title: 'ยืนยันการสั่งซื้อ?',
         html: `<strong>ลูกค้า:</strong> ${customer}<br><strong>สินค้า:</strong> ${item}<br><strong>รายละเอียด:</strong> ${detail}`,
         showCancelButton: true,
@@ -87,7 +94,42 @@
         cancelButtonColor: '#dc3545'
       }).then((result) => {
         if (result.isConfirmed) {
-          document.getElementById("orderForm").submit();
+          // ส่งคำสั่งแบบ fetch ไป backend
+          fetch('/submit', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              department,
+              customer,
+              item,
+              detail
+            }),
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('ส่งคำสั่งไม่สำเร็จ');
+            return res.text();
+          })
+          .then(() => {
+            Swal.fire({
+              icon: 'success',
+              title: 'ส่งคำสั่งซื้อเรียบร้อยแล้ว',
+              showConfirmButton: false,
+              timer: 1800
+            });
+
+            setTimeout(() => {
+              if (department === "fish") {
+                window.location.href = "/orders_fish";
+              } else if (department === "pork") {
+                window.location.href = "/orders_pork";
+              }
+            }, 1800);
+          })
+          .catch(() => {
+            Swal.fire('เกิดข้อผิดพลาด', 'กรุณาลองใหม่', 'error');
+          });
         }
       });
     }
