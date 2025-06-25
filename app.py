@@ -34,3 +34,14 @@ def submit():
     })
 
     return "OK", 200
+
+@app.route("/orders_fish")
+def orders_fish():
+    fish_orders = [order for order in orders if order["department"] == "fish"]
+    return render_template("orders_fish.html", orders=fish_orders)
+
+@app.route("/orders_pork")
+def orders_pork():
+    pork_orders = [order for order in orders if order["department"] == "pork"]
+    return render_template("orders_pork.html", orders=pork_orders)
+
