@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 
 app = Flask(__name__)
 orders = []
@@ -13,27 +13,24 @@ def form():
 
 @app.route("/submit", methods=["POST"])
 def submit():
-    item = request.form["item"]
-    detail = request.form["detail"]
-    customer = request.form["customer"]
-    department = request.form["department"]
+    data = request.get_json()  # รับ JSON จาก fetch
+
+    if not data:
+        return jsonify({"error": "ไม่มีข้อมูล"}), 400
+
+    item = data.get("item")
+    detail = data.get("detail")
+    customer = data.get("customer")
+    department = data.get("department")
+
+    if not all([item, detail, customer, department]):
+        return jsonify({"error": "ข้อมูลไม่ครบ"}), 400
+
     orders.append({
         "item": item,
         "detail": detail,
         "customer": customer,
         "department": department
     })
-    return redirect("/")
 
-@app.route("/orders/fish")
-def orders_fish():
-    fish_orders = [o for o in orders if o["department"] == "fish"]
-    return render_template("orders_fish.html", orders=fish_orders)
-
-@app.route("/orders/pork")
-def orders_pork():
-    pork_orders = [o for o in orders if o["department"] == "pork"]
-    return render_template("orders_pork.html", orders=pork_orders)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+    return "OK", 200
