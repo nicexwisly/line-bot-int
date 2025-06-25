@@ -12,6 +12,7 @@
     .btn-custom {
       max-width: 300px;
       width: 100%;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -20,27 +21,14 @@
   <div class="text-center">
     <h1 class="mb-4">ระบบจัดการคำสั่งซื้อ</h1>
 
-    <button onclick="chooseDepartment()" class="btn btn-outline-light btn-lg mb-3 btn-custom">
-      สำหรับแผนก
-    </button><br>
+    <h5 class="mb-3">เลือกแผนก</h5>
+    <a href="/orders/fish" class="btn btn-outline-info btn-lg btn-custom">แผนกปลา 🐟</a><br>
+    <a href="/orders/pork" class="btn btn-outline-danger btn-lg btn-custom">แผนกหมู 🐖</a><br>
 
-    <button onclick="window.location.href='/form'" class="btn btn-outline-primary btn-lg btn-custom">
-      สั่งสินค้า
-    </button>
+    <hr class="my-4" style="border-color: #444;">
+
+    <a href="/form" class="btn btn-primary btn-lg btn-custom">📝 สั่งสินค้า</a>
   </div>
-
-  <script>
-    function chooseDepartment() {
-      const dept = prompt("กรุณาเลือกแผนก: พิมพ์ 'fish' หรือ 'pork'");
-      if (dept === "fish") {
-        window.location.href = "/orders/fish";
-      } else if (dept === "pork") {
-        window.location.href = "/orders/pork";
-      } else {
-        alert("แผนกไม่ถูกต้อง");
-      }
-    }
-  </script>
 
 </body>
 </html>
