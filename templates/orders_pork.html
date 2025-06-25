@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>คำสั่งซื้อแผนกหมู</title>
+</head>
+<body>
+    <h1>รายการคำสั่งซื้อ - แผนกหมู</h1>
+    <ul>
+        {% for order in orders %}
+            <li><b>{{ order.customer }}</b>: {{ order.item }} - {{ order.detail }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

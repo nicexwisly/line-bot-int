@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ระบบจัดการคำสั่งซื้อ</title>
+</head>
+<body>
+    <h1>ระบบจัดการคำสั่งซื้อ</h1>
+    <button onclick="chooseDepartment()">แผนก</button>
+    <button onclick="window.location.href='/form'">สั่งสินค้า</button>
+
+    <script>
+        function chooseDepartment() {
+            const dept = prompt("กรุณาเลือกแผนก: พิมพ์ 'fish' หรือ 'pork'");
+            if (dept === "fish") {
+                window.location.href = "/orders/fish";
+            } else if (dept === "pork") {
+                window.location.href = "/orders/pork";
+            } else {
+                alert("แผนกไม่ถูกต้อง");
+            }
+        }
+    </script>
+</body>
+</html>

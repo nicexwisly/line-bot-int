@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ฟอร์มสั่งสินค้า</title>
+</head>
+<body>
+    <h1>ฟอร์มสั่งสินค้า</h1>
+    <form action="/submit" method="POST">
+        <label>Item:</label><br>
+        <input type="text" name="item" required><br><br>
+
+        <label>รายละเอียด:</label><br>
+        <textarea name="detail" required></textarea><br><br>
+
+        <label>ชื่อลูกค้า:</label><br>
+        <input type="text" name="customer" required><br><br>
+
+        <label>แผนก:</label><br>
+        <select name="department" required>
+            <option value="fish">แผนกปลา</option>
+            <option value="pork">แผนกหมู</option>
+        </select><br><br>
+
+        <button type="submit">ส่งคำสั่งซื้อ</button>
+    </form>
+</body>
+</html>
