@@ -22,6 +22,7 @@
     <h5>ลูกค้า: {{ order.customer }}</h5>
     <p><strong>รหัสสินค้า:</strong> {{ order.item }}</p>
     <p><strong>รายละเอียด:</strong> {{ order.detail }}</p>
+    <p><strong>คิว:</strong> {{ order.queue }}</p>
 
     {% if order.status == "new" %}
       <span class="badge bg-primary">New</span>
