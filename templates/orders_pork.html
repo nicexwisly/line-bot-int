@@ -19,52 +19,55 @@
   <h2 class="mb-4">รายการคำสั่งซื้อ - แผนกหมู</h2>
   <div id="order-list"></div>
 
-  <script>
-    let latestQueue = null;
+<script>
+  var latestQueue = null;
 
-    async function loadOrders() {
-      try {
-        const res = await fetch('/api/orders/pork');
-        const orders = await res.json();
+  function loadOrders() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/orders/pork', true);
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var orders = JSON.parse(xhr.responseText);
 
         if (orders.length > 0 && orders[orders.length - 1].queue === latestQueue) return;
-        latestQueue = orders[orders.length - 1]?.queue;
+        latestQueue = orders[orders.length - 1] ? orders[orders.length - 1].queue : null;
 
-        const list = document.getElementById("order-list");
-        list.innerHTML = ""; // ล้างข้อมูลเดิม
+        var list = document.getElementById("order-list");
+        list.innerHTML = "";
 
-        orders.forEach((order, index) => {
-          let statusBadge = "";
-          let actionBtn = "";
+        for (var i = 0; i < orders.length; i++) {
+          var order = orders[i];
+          var badge = "";
+          var btn = "";
 
           if (order.status === "new") {
-            statusBadge = `<span class="badge bg-primary">New</span>`;
-            actionBtn = `<a href="/update_status/${index}/in_process/${order.department}" class="btn btn-sm btn-outline-light ms-2">รับรายการ</a>`;
+            badge = '<span class="badge bg-primary">New</span>';
+            btn = '<a href="/update_status/' + i + '/in_process/pork" class="btn btn-sm btn-outline-light ms-2">รับรายการ</a>';
           } else if (order.status === "in_process") {
-            statusBadge = `<span class="badge bg-warning text-dark">In Process</span>`;
-            actionBtn = `<a href="/update_status/${index}/done/${order.department}" class="btn btn-sm btn-outline-light ms-2">ออเดอร์นี้เสร็จแล้ว</a>`;
+            badge = '<span class="badge bg-warning text-dark">In Process</span>';
+            btn = '<a href="/update_status/' + i + '/done/pork" class="btn btn-sm btn-outline-light ms-2">ออเดอร์นี้เสร็จแล้ว</a>';
           } else {
-            statusBadge = `<span class="badge bg-success">Completed</span>`;
+            badge = '<span class="badge bg-success">Completed</span>';
           }
 
-          const html = `
-            <div class="order-card p-3 mb-3 rounded shadow-sm">
-              <h5>ลูกค้า: ${order.customer}</h5>
-              <p><strong>รหัสสินค้า:</strong> ${order.item}</p>
-              <p><strong>รายละเอียด:</strong> ${order.detail}</p>
-              <p><strong>คิว:</strong> ${order.queue}</p>
-              ${statusBadge} ${actionBtn}
-            </div>
-          `;
-          list.innerHTML += html;
-        });
-      } catch (err) {
-        console.error("โหลดข้อมูลล้มเหลว:", err);
-      }
-    }
+          var html = '<div class="order-card p-3 mb-3 rounded shadow-sm">' +
+                     '<h5>ลูกค้า: ' + order.customer + '</h5>' +
+                     '<p><strong>รหัสสินค้า:</strong> ' + order.item + '</p>' +
+                     '<p><strong>รายละเอียด:</strong> ' + order.detail + '</p>' +
+                     '<p><strong>คิว:</strong> ' + order.queue + '</p>' +
+                     badge + ' ' + btn +
+                     '</div>';
 
-    loadOrders();                // โหลดครั้งแรก
-    setInterval(loadOrders, 5000); // โหลดทุก 5 วิ
-  </script>
+          list.innerHTML += html;
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  loadOrders();
+  setInterval(loadOrders, 5000);
+</script>
 </body>
 </html>
