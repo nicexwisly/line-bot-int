@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 orders = []
 orders_fish = []
-queue_counter = 1
+queue_counter = {"fish": 1, "pork": 1}
 
 @app.route("/")
 def index():
@@ -30,13 +30,16 @@ def submit():
         return jsonify({"error": "ข้อมูลไม่ครบ"}), 400
     
     global queue_counter
+    if department not in queue_counter:
+        queue_counter[department] = 1
+
     orders.append({
         "item": item,
         "detail": detail,
         "customer": customer,
         "department": department,
         "status": "new",
-        "queue": f"{queue_counter:03}"
+        "queue": f"{queue_counter[department]:03}"
     })
     queue_counter +=1
     return "OK", 200
@@ -45,6 +48,16 @@ def submit():
 def orders_fish():
     fish_orders = [o for o in orders if o["department"] == "fish"]
     return render_template("orders_fish.html", orders=fish_orders)
+
+@app.route("/api/orders/fish")
+def api_orders_fish():
+    fish_orders = [o for o in orders if o["department"] == "fish"]
+    return jsonify(fish_orders)
+
+@app.route("/api/orders/pork")
+def api_orders_pork():
+    pork_orders = [o for o in orders if o["department"] == "pork"]
+    return jsonify(pork_orders)
 
 @app.route("/update_status/<int:index>/<status>/<department>")
 def update_status(index, status, department):
