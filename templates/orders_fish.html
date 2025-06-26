@@ -25,10 +25,10 @@
 
     {% if order.status == "new" %}
       <span class="badge bg-primary">New</span>
-      <a href="/update_status/{{ loop.index0 }}/in_process" class="btn btn-sm btn-outline-success ms-2">รับรายการ</a>
+      <a href="/update_status/{{ loop.index0 }}/in_process/{{ order.department }}">รับรายการ</a>
     {% elif order.status == "in_process" %}
       <span class="badge bg-warning text-dark">In Process</span>
-      <a href="/update_status/{{ loop.index0 }}/done" class="btn btn-sm btn-outline-success ms-2">ออเดอร์นี้เสร็จแล้ว</a>
+      <a href="/update_status/{{ loop.index0 }}/done/{{ order.department }}">ออเดอร์นี้เสร็จแล้ว</a>
     {% elif order.status == "done" %}
       <span class="badge bg-success">Completed</span>
     {% endif %}
