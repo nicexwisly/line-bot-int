@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, jsonify
 app = Flask(__name__)
 
 orders = []
-orders_fish = []
 queue_counter = {"fish": 1, "pork": 1}
 
 @app.route("/")
@@ -17,6 +16,7 @@ def form():
 @app.route("/submit", methods=["POST"])
 def submit():
     data = request.get_json()  # รับ JSON จาก fetch
+    print("DATA RECEIVED", data)
 
     if not data:
         return jsonify({"error": "ไม่มีข้อมูล"}), 400
