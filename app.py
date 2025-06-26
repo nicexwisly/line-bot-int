@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, jsonify
 
 app = Flask(__name__)
+
 orders = []
+orders_fish = []
 
 @app.route("/")
 def index():
@@ -30,7 +32,8 @@ def submit():
         "item": item,
         "detail": detail,
         "customer": customer,
-        "department": department
+        "department": department,
+        "status": "new"
     })
 
     return "OK", 200
@@ -40,8 +43,22 @@ def orders_fish():
     fish_orders = [o for o in orders if o["department"] == "fish"]
     return render_template("orders_fish.html", orders=fish_orders)
 
+@app.route("/update_status/<int:index>/<status>")
+def update_status(index, status):
+    fish_orders = [o for o in orders if o["department"] == "fish"]
+    if 0 <= index < len(fish_orders):
+        fish_orders[index]["status"] = status
+    return redirect("/orders/fish")
+
 @app.route("/orders/pork")
 def orders_pork():
     pork_orders = [o for o in orders if o["department"] == "pork"]
-    return render_template("orders_pork.html", orders=pork_orders)
+    return render_template("orders_pork.html", orders=pork_orders, department_name="หมู")
+
+@app.route("/update_status/<int:index>/<status>")
+def update_status(index, status):
+    pork_orders = [o for o in orders if o["department"] == "pork"]
+    if 0 <= index < len(pork_orders):
+        pork_orders[index]["status"] = status
+    return redirect("/orders/pork")
 
