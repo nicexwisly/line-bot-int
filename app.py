@@ -41,7 +41,7 @@ def submit():
         "status": "new",
         "queue": f"{queue_counter[department]:03}"
     })
-    queue_counter +=1
+    queue_counter[department] += 1
     return "OK", 200
 
 @app.route("/orders/fish")
