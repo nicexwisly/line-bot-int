@@ -17,11 +17,22 @@
 </head>
 <body class="p-5">
   <h2 class="mb-4">รายการคำสั่งซื้อ - แผนก{{ department_name }}</h2>
+
   {% for order in orders %}
   <div class="order-card p-3 mb-3 rounded shadow-sm">
     <h5>ลูกค้า: {{ order.customer }}</h5>
     <p><strong>รหัสสินค้า:</strong> {{ order.item }}</p>
     <p><strong>รายละเอียด:</strong> {{ order.detail }}</p>
+
+    {% if order.status == "new" %}
+      <span class="badge bg-primary">New</span>
+      <a href="/update_status/{{ loop.index0 }}/in_process" class="btn btn-sm btn-outline-success ms-2">รับรายการ</a>
+    {% elif order.status == "in_process" %}
+      <span class="badge bg-warning text-dark">In Process</span>
+      <a href="/update_status/{{ loop.index0 }}/done" class="btn btn-sm btn-outline-success ms-2">ออเดอร์นี้เสร็จแล้ว</a>
+    {% elif order.status == "done" %}
+      <span class="badge bg-success">Completed</span>
+    {% endif %}
   </div>
   {% endfor %}
 </body>
