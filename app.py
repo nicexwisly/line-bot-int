@@ -4,6 +4,7 @@ app = Flask(__name__)
 
 orders = []
 orders_fish = []
+queue_counter = 1
 
 @app.route("/")
 def index():
@@ -27,15 +28,17 @@ def submit():
 
     if not all([item, detail, customer, department]):
         return jsonify({"error": "ข้อมูลไม่ครบ"}), 400
-
+    
+    global queue_counter
     orders.append({
         "item": item,
         "detail": detail,
         "customer": customer,
         "department": department,
-        "status": "new"
+        "status": "new",
+        "queue": f"{queue_counter:03}"
     })
-
+    queue_counter +=1
     return "OK", 200
 
 @app.route("/orders/fish")
