@@ -60,6 +60,7 @@
                      '<h5>ลูกค้า: ' + order.customer + '</h5>' +
                      '<p><strong>รหัสสินค้า:</strong> ' + order.item + '</p>' +
                      '<p><strong>รายละเอียด:</strong> ' + order.detail + '</p>' +
+                     '<p><strong>เวลาที่ลูกค้าจะมารับ:</strong> ' + (order.pickup_time ? order.pickup_time : 'ไม่ระบุ') + '</p>' +
                      '<p><strong>คิว:</strong> ' + order.queue + '</p>' +
                      badge + ' ' + btn +
                      '</div>';
@@ -91,7 +92,7 @@
       window.location.href = confirmUrl;
     };
   });
-  
+
   setInterval(loadOrders, 5000);
 </script>
 </body>

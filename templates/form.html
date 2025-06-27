@@ -70,6 +70,11 @@
         <textarea class="form-control" id="detail" name="detail" rows="3" required></textarea>
       </div>
 
+      <div class="mb-3">
+        <label for="pickupTime" class="form-label">เวลาที่ลูกค้าจะมารับ</label>
+        <input type="time" class="form-control" id="pickupTime" name="pickupTime">
+      </div>
+
       <div class="d-grid">
         <button type="button" class="btn btn-primary" onclick="confirmOrder()">ส่งคำสั่งซื้อ</button>
       </div>
@@ -94,6 +99,7 @@
     var customer = document.getElementById("customer").value;
     var item = document.getElementById("item").value;
     var detail = document.getElementById("detail").value;
+    var pickupTime = document.getElementById("pickupTime").value;
 
     if (!department || !customer || !item || !detail) {
       showNotification("กรุณากรอกข้อมูลให้ครบถ้วน", "danger");
@@ -132,7 +138,8 @@
       department: document.getElementById("department").value,
       customer: document.getElementById("customer").value,
       item: document.getElementById("item").value,
-      detail: document.getElementById("detail").value
+      detail: document.getElementById("detail").value,
+      pickupTime: document.getElementById("pickupTime").value
     });
 
     xhr.send(data);
