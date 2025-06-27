@@ -18,6 +18,11 @@
 <body class="p-5">
   <h2 class="mb-4">รายการคำสั่งซื้อ - แผนกปลา</h2>
   <div id="order-list"></div>
+  <div id="confirmBox" class="alert alert-warning d-none mt-2">
+    <p id="confirmMessage">คุณต้องการยืนยันการเปลี่ยนสถานะหรือไม่?</p>
+    <button class="btn btn-sm btn-success" id="confirmYes">ยืนยัน</button>
+    <button class="btn btn-sm btn-secondary" onclick="hideConfirm()">ยกเลิก</button>
+  </div>
 
 <script>
   var latestQueue = null;
@@ -43,10 +48,10 @@
 
           if (order.status === "new") {
             badge = '<span class="badge bg-primary">New</span>';
-            btn = '<a href="/update_status/' + i + '/in_process/fish" class="btn btn-sm btn-outline-light ms-2">รับรายการ</a>';
+            btn = '<button class="btn btn-sm btn-outline-light ms-2" onclick="askConfirm(\'/update_status/' + i + '/in_process/fish\')">รับรายการ</button>';
           } else if (order.status === "in_process") {
             badge = '<span class="badge bg-warning text-dark">In Process</span>';
-            btn = '<a href="/update_status/' + i + '/done/fish" class="btn btn-sm btn-outline-light ms-2">ออเดอร์นี้เสร็จแล้ว</a>';
+            btn = '<button class="btn btn-sm btn-outline-light ms-2" onclick="askConfirm(\'/update_status/' + i + '/done/fish\')">ออเดอร์นี้เสร็จแล้ว</button>';
           } else {
             badge = '<span class="badge bg-success">Completed</span>';
           }
@@ -67,6 +72,26 @@
   }
 
   loadOrders();
+  
+  var confirmUrl = "";
+
+  function askConfirm(url) {
+    confirmUrl = url;
+    document.getElementById("confirmMessage").innerHTML = "คุณแน่ใจที่จะดำเนินการนี้หรือไม่?";
+    document.getElementById("confirmBox").classList.remove("d-none");
+  }
+
+  function hideConfirm() {
+    document.getElementById("confirmBox").classList.add("d-none");
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var yesBtn = document.getElementById("confirmYes");
+    yesBtn.onclick = function() {
+      window.location.href = confirmUrl;
+    };
+  });
+  
   setInterval(loadOrders, 5000);
 </script>
 </body>
