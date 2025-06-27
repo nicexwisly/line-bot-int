@@ -16,7 +16,7 @@ def form():
 @app.route("/submit", methods=["POST"])
 def submit():
     data = request.get_json()  # รับ JSON จาก fetch
-    print("DATA RECEIVED", data)
+    pickup_time = data.get("pickupTime")
 
     if not data:
         return jsonify({"error": "ไม่มีข้อมูล"}), 400
@@ -39,6 +39,7 @@ def submit():
         "customer": customer,
         "department": department,
         "status": "new",
+        "pickup_time": pickup_time,
         "queue": f"{queue_counter[department]:03}"
     })
     queue_counter[department] += 1
