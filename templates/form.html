@@ -3,10 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>ฟอร์มสั่งซื้อสินค้า</title>
-
-  <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <style>
     body {
       background-color: #121212;
@@ -16,7 +13,6 @@
       align-items: center;
       height: 100vh;
     }
-
     .form-container {
       background-color: #1f1f1f;
       padding: 30px;
@@ -25,7 +21,9 @@
       width: 100%;
       max-width: 600px;
     }
-
+    .alert-area {
+      margin-top: 20px;
+    }
     label {
       color: #f1f1f1;
     }
@@ -35,8 +33,10 @@
 
   <div class="form-container">
     <h3 class="mb-4 text-center">ฟอร์มสั่งซื้อสินค้า</h3>
-    <div id="notification" class="alert d-none" role="alert"></div>
-    
+    <!-- Notification -->
+    <div id="notification" class="alert-area"></div>
+
+    <!-- Confirm Box -->
     <div id="confirmBox" class="alert alert-warning mt-3 d-none">
       <p>คุณต้องการยืนยันคำสั่งซื้อหรือไม่?</p>
       <div class="d-flex justify-content-end">
@@ -83,30 +83,23 @@
 
 <script>
   function showNotification(message, type) {
-    var box = document.getElementById("notification");
-    box.className = "alert alert-" + type;
-    box.innerHTML = message;
-    box.classList.remove("d-none");
-
-    setTimeout(function () {
-      box.classList.add("d-none");
-    }, 3000);
+    var notification = document.getElementById("notification");
+    notification.innerHTML = '<div class="alert alert-' + type + '">' + message + '</div>';
+    setTimeout(function() { notification.innerHTML = ''; }, 3000);
   }
 
   function confirmOrder() {
-    // ตรวจสอบช่องว่าง
+    // ตรวจสอบ
     var department = document.getElementById("department").value;
     var customer = document.getElementById("customer").value;
     var item = document.getElementById("item").value;
     var detail = document.getElementById("detail").value;
-    var pickupTime = document.getElementById("pickupTime").value;
 
     if (!department || !customer || !item || !detail) {
-      showNotification("กรุณากรอกข้อมูลให้ครบถ้วน", "danger");
+      showNotification("⚠️ กรุณากรอกข้อมูลให้ครบถ้วน", "warning");
       return;
     }
 
-    // แสดงกล่องยืนยันแบบ in-page
     document.getElementById("confirmBox").classList.remove("d-none");
   }
 
@@ -115,7 +108,7 @@
   }
 
   function submitConfirmed() {
-    hideConfirm(); // ซ่อนกล่อง
+    hideConfirm();
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/submit", true);
@@ -124,12 +117,10 @@
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-          showNotification("ส่งคำสั่งซื้อเรียบร้อยแล้ว", "success");
-          setTimeout(function () {
-            window.location.href = "/";
-          }, 2000);
+          showNotification("✅ ส่งคำสั่งซื้อเรียบร้อยแล้ว", "success");
+          setTimeout(function() { window.location.href = "/"; }, 1500);
         } else {
-          showNotification("เกิดข้อผิดพลาด กรุณาลองใหม่", "danger");
+          showNotification("❌ เกิดข้อผิดพลาด กรุณาลองใหม่", "danger");
         }
       }
     };
@@ -145,8 +136,6 @@
     xhr.send(data);
   }
 </script>
-
-
 
 </body>
 </html>
